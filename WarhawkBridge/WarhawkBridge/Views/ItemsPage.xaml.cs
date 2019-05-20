@@ -16,13 +16,16 @@ namespace WarhawkBridge.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ItemsPage : ContentPage
 	{
-		ItemsViewModel viewModel;
-
+		ServerListViewModel viewModel;
+		
 		public ItemsPage()
 		{
 			InitializeComponent();
 
-			BindingContext = viewModel = new ItemsViewModel();
+			BindingContext = viewModel = new ServerListViewModel();
+
+			Switch s = this.FindByName<Switch>("ServiceToggleSwitch");
+			viewModel.ToggleServiceCommand(s.IsToggled);
 		}
 
 		async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -39,15 +42,20 @@ namespace WarhawkBridge.Views
 
 		async void AddItem_Clicked(object sender, EventArgs e)
 		{
-			await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
+			//await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
 		}
 
 		protected override void OnAppearing()
 		{
 			base.OnAppearing();
 
-			if (viewModel.Items.Count == 0)
+			if (viewModel.Servers.Count == 0)
 				viewModel.LoadItemsCommand.Execute(null);
+		}
+
+		private void ServiceToggleSwitch_Toggled(object sender, ToggledEventArgs e)
+		{
+			viewModel.ToggleServiceCommand(e.Value);
 		}
 	}
 }

@@ -17,7 +17,7 @@ namespace WarhawkBridge.ViewModels
 
 		public ItemsViewModel()
 		{
-			Title = "Browse";
+			Title = "Active Servers";
 			Items = new ObservableCollection<Item>();
 			LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
